@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OcuScan AI — Clinical-Grade Retinal Disease Screening Platform</title>
+    <meta name="description" content="Production-grade AI ophthalmic decision support platform. Instant 8-category ocular disease classification from retinal fundus photographs powered by ResNet50 and explainable Grad-CAM heatmaps.">
+    
+    <!-- Modern Editorial Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Outer Ambient Gradient Frame -->
+    <div class="ambient-frame">
+        <div class="frame-mesh mesh-violet"></div>
+        <div class="frame-mesh mesh-coral"></div>
+        <div class="frame-mesh mesh-amber"></div>
+
+        <!-- Master Canvas Container (Warm Alabaster Surface) -->
+        <div class="master-canvas">
+            
+            <!-- A. Minimalist Navigation Bar -->
+            <header class="editorial-nav">
+                <div class="nav-brand">
+                    <div class="brand-aperture-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3.5" />
+                            <path d="M3 12c2.8-5.5 6.5-8.5 9-8.5s6.2 3 9 8.5c-2.8 5.5-6.5 8.5-9 8.5s-6.2-3-9-8.5z" stroke-linecap="round" />
+                            <circle cx="12" cy="12" r="8" stroke-dasharray="2 3" stroke-width="1.2" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div class="brand-text-group">
+                        <span class="brand-name">OcuScan <span class="brand-badge-ai">AI</span></span>
+                        <span class="brand-discipline">Ophthalmology SaaS</span>
+                    </div>
+                </div>
+
+                <nav class="nav-links">
+                    <a href="#how-it-works" class="nav-link">How It Works</a>
+                    <a href="#disease-classes" class="nav-link">8 Disease Classes</a>
+                    <a href="#workspace" class="nav-link">Diagnostic Workspace</a>
+                    <a href="#clinical-validation" class="nav-link">Clinical Validation</a>
+                </nav>
+
+                <div class="nav-actions">
+                    <div class="status-indicator-pill">
+                        <span class="pulse-dot"></span>
+                        <span class="indicator-label">ResNet50 Active</span>
+                    </div>
+                    <a href="#workspace" class="ghost-pill-btn" id="btn-nav-scanner">
+                        <span>Try Live Scanner</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </header>
+
+            <!-- B. Asymmetric Hero Section -->
+            <section class="hero-section">
+                
+                <!-- Left Column: Editorial Headline & Actions -->
+                <div class="hero-left-col">
+                    <div class="clinical-announcement-pill">
+                        <span class="pill-sparkle">✦</span>
+                        <span class="pill-text">ODIR-5K Benchmark Validated • 0.94 ROC-AUC</span>
+                    </div>
+
+                    <h1 class="hero-headline">
+                        <span class="headline-gradient">One fundus scan,</span><br>
+                        <span class="headline-dark">
+                            <span id="typewriter-text">eight clinical insights.</span>
+                            <span class="typewriter-caret" aria-hidden="true"></span>
+                        </span>
+                    </h1>
+
+                    <p class="hero-lead-text">
+                        OcuScan AI triages color fundus photographs across 8 clinical ocular pathologies in under 2 seconds. Powered by deep convolutional neural networks with pixel-level Grad-CAM interpretability for immediate diagnostic verification.
+                    </p>
+
+                    <!-- Authentic Clinical Quote Sub-text -->
+                    <div class="hero-quote-card">
+                        <p class="hero-quote-italic">
+                            "The retina is the only place in the human body where microvessels and neural tissue can be visualized directly and non-invasively — early triage saves sight."
+                        </p>
+                    </div>
+
+                    <!-- Dual Pill CTAs -->
+                    <div class="hero-cta-group">
+                        <a href="#workspace" class="primary-gradient-cta" id="hero-cta-scan">
+                            <span>Scan Fundus Image</span>
+                            <span class="cta-arrow-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="15" height="15">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </a>
+
+                        <a href="#disease-classes" class="secondary-outline-cta" id="hero-cta-explore">
+                            <span>Explore 8 Pathologies</span>
+                        </a>
+                    </div>
+
+                    <!-- Micro-Trust Row -->
+                    <div class="hero-trust-row">
+                        <span class="trust-item"><span class="trust-bullet">•</span> 8 ODIR Categories</span>
+                        <span class="trust-item"><span class="trust-bullet">•</span> Grad-CAM Heatmaps</span>
+                        <span class="trust-item"><span class="trust-bullet">•</span> Dual VGG16 / ResNet50</span>
+                    </div>
+                </div>
+
+                <!-- Right Column: Spatial Floating Diagnostic Showcase -->
+                <div class="hero-right-col">
+                    <div class="spatial-showcase-container">
+                        
+                        <!-- SVG Connector Lines (Subtle Curved Animated Dashed Beams) -->
+                        <svg class="spatial-svg-connectors" viewBox="0 0 660 560" fill="none" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#7C3AED" />
+                                    <stop offset="50%" stop-color="#DB2777" />
+                                    <stop offset="100%" stop-color="#EA580C" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Connector 1: Top-Left (Optic Nerve) to Center -->
+                            <path class="svg-connector-path path-node1" d="M 125 75 C 190 95, 240 145, 275 195" stroke="url(#brandGradient)" stroke-width="1.6" stroke-dasharray="4 6" />
+                            <!-- Connector 2: Top-Right (Macula) to Center -->
+                            <path class="svg-connector-path path-node2" d="M 535 75 C 470 95, 420 145, 385 195" stroke="url(#brandGradient)" stroke-width="1.6" stroke-dasharray="4 6" />
+                            <!-- Connector 3: Bottom-Left (Vessels) to Center -->
+                            <path class="svg-connector-path path-node3" d="M 125 470 C 195 440, 240 380, 275 320" stroke="url(#brandGradient)" stroke-width="1.6" stroke-dasharray="4 6" />
+                            <!-- Connector 4: Bottom-Right (Periphery) to Center -->
+                            <path class="svg-connector-path path-node4" d="M 535 480 C 475 450, 435 390, 395 330" stroke="url(#brandGradient)" stroke-width="1.6" stroke-dasharray="4 6" />
+                        </svg>
+
+                        <!-- Top-Right Mini Trust Badge -->
+                        <div class="hero-float-badge trust-pill-badge">
+                            <span class="gold-star">★</span>
+                            <span class="trust-badge-text"><strong>0.94 ROC-AUC</strong> • ODIR-5K Cohort</span>
+                        </div>
+
+                        <!-- 4 Satellite Anatomical Checkpoints (Floating Orbit Nodes) -->
+                        
+                        <!-- Satellite 1: Top Left - Optic Nerve Head -->
+                        <div class="satellite-node node-top-left float-node-1" title="Optic Nerve Head Evaluation">
+                            <div class="node-thumbnail">
+                                <img src="/static/checkpoints/optic_disc.png" alt="Optic Nerve Head">
+                            </div>
+                            <div class="node-info">
+                                <span class="node-title">Optic Nerve Head</span>
+                                <span class="node-meta">Glaucoma CDR (0.42)</span>
+                            </div>
+                        </div>
+
+                        <!-- Satellite 2: Top Right - Macular Region -->
+                        <div class="satellite-node node-top-right float-node-2" title="Macula Lutea & Fovea">
+                            <div class="node-thumbnail">
+                                <img src="/static/checkpoints/macula.png" alt="Macular Region">
+                            </div>
+                            <div class="node-info">
+                                <span class="node-title">Macular Center</span>
+                                <span class="node-meta">AMD Drusen Check</span>
+                            </div>
+                        </div>
+
+                        <!-- Satellite 3: Bottom Left - Vascular Arcade -->
+                        <div class="satellite-node node-bottom-left float-node-3" title="Retinal Vascular Architecture">
+                            <div class="node-thumbnail">
+                                <img src="/static/checkpoints/vessels.png" alt="Vascular Arcade">
+                            </div>
+                            <div class="node-info">
+                                <span class="node-title">Vascular Arcade</span>
+                                <span class="node-meta">Hypertension Arterioles</span>
+                            </div>
+                        </div>
+
+                        <!-- Satellite 4: Bottom Right - Peripheral Retina -->
+                        <div class="satellite-node node-bottom-right float-node-4" title="Peripheral Fundus">
+                            <div class="node-thumbnail">
+                                <img src="/static/checkpoints/periphery.png" alt="Peripheral Retina">
+                            </div>
+                            <div class="node-info">
+                                <span class="node-title">Peripheral Retina</span>
+                                <span class="node-meta">Microaneurysm Check</span>
+                            </div>
+                        </div>
+
+                        <!-- Central Featured Diagnostic Widget Card (Deep Obsidian #121316) -->
+                        <div class="hero-central-card">
+                            <div class="card-glass-header">
+                                <div class="header-status-group">
+                                    <span class="obsidian-live-dot"></span>
+                                    <span class="obsidian-title">Fundus Scan Analysis</span>
+                                </div>
+                                <div class="header-action-dots">
+                                    <span></span><span></span><span></span>
+                                </div>
+                            </div>
+
+                            <!-- Central Retinal Scan Viewport -->
+                            <div class="obsidian-scan-viewport">
+                                <img src="/static/samples/diabetes.png" alt="Active Color Fundus Scan" class="obsidian-fundus-img">
+                                <div class="obsidian-scan-reticle">
+                                    <div class="reticle-corner corner-tl"></div>
+                                    <div class="reticle-corner corner-tr"></div>
+                                    <div class="reticle-corner corner-bl"></div>
+                                    <div class="reticle-corner corner-br"></div>
+                                    <div class="reticle-center-cross"></div>
+                                </div>
+                                <!-- Waveform Bar Animation -->
+                                <div class="obsidian-audio-waveform">
+                                    <span class="wave-bar wb-1"></span>
+                                    <span class="wave-bar wb-2"></span>
+                                    <span class="wave-bar wb-3"></span>
+                                    <span class="wave-bar wb-4"></span>
+                                    <span class="wave-bar wb-5"></span>
+                                    <span class="wave-bar wb-6"></span>
+                                    <span class="wave-bar wb-7"></span>
+                                    <span class="wave-bar wb-8"></span>
+                                </div>
+                            </div>
+
+                            <!-- Diagnostic Meta Bar Inside Obsidian Card -->
+                            <div class="obsidian-meta-footer">
+                                <div class="meta-timer">
+                                    <span class="timer-icon">⏱</span>
+                                    <span class="timer-digits">00:01.42s</span>
+                                </div>
+                                <div class="meta-status-pill">
+                                    <span class="sparkle-ai">✨</span>
+                                    <span>Analyzing Macula & Optic Disc...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Overlapping Floating White Result Card -->
+                        <div class="hero-overlapping-result float-result-card">
+                            <div class="result-card-top">
+                                <div class="result-avatar">
+                                    <span class="avatar-sym">OD</span>
+                                </div>
+                                <div class="result-header-text">
+                                    <div class="result-condition-title">Diabetic Retinopathy</div>
+                                    <div class="result-meta-line">
+                                        <span class="confidence-tag">94.2% Confidence</span>
+                                        <span class="meta-separator">•</span>
+                                        <span class="time-tag">Primary Finding</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-biomarker-box">
+                                <span class="biomarker-badge">Clinical Biomarkers</span>
+                                <p class="biomarker-text">Parafoveal microaneurysms and dot hemorrhages detected with high focal activation.</p>
+                            </div>
+
+                            <div class="result-card-action">
+                                <a href="#workspace" class="quick-heatmap-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                        <polyline points="2 17 12 22 22 17"></polyline>
+                                        <polyline points="2 12 12 17 22 12"></polyline>
+                                    </svg>
+                                    <span>Inspect Grad-CAM Heatmap</span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- C. Clean Announcement Bar & 8-Class Benchmark Strip -->
+            <div class="hero-announcement-strip">
+                <div class="strip-content">
+                    <span class="strip-sparkle">✦</span>
+                    <span class="strip-text">Open-access clinical decision support — Upload any standard color fundus photograph for instant 8-class triage</span>
+                    <a href="#workspace" class="strip-arrow-link">Open Workspace →</a>
+                </div>
+            </div>
+
+            <section class="benchmark-ticker-section" id="disease-classes">
+                <div class="ticker-label">Covered Clinical Categories — Click for Clinical Overview</div>
+                <div class="ticker-scroll-row">
+                    <a href="https://en.wikipedia.org/wiki/Fundus_(eye)" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read Normal Fundus anatomy on Wikipedia">
+                        <span class="chip-color-dot" style="background: #10B981;"></span>
+                        <span>Normal (Healthy)</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Diabetic_retinopathy" target="_blank" rel="noopener noreferrer" class="disease-pill-chip active-chip" title="Read Diabetic Retinopathy pathology on Wikipedia">
+                        <span class="chip-color-dot" style="background: #EF4444;"></span>
+                        <span>Diabetic Retinopathy</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Glaucoma" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read Glaucoma optic neuropathy on Wikipedia">
+                        <span class="chip-color-dot" style="background: #8B5CF6;"></span>
+                        <span>Glaucoma (CDR)</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Cataract" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read Cataract lens opacification on Wikipedia">
+                        <span class="chip-color-dot" style="background: #F59E0B;"></span>
+                        <span>Cataract (Lens Opacity)</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Macular_degeneration" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read Age-Related Macular Degeneration (AMD) on Wikipedia">
+                        <span class="chip-color-dot" style="background: #EC4899;"></span>
+                        <span>Macular Degeneration (AMD)</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Hypertensive_retinopathy" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read Hypertensive Retinopathy on Wikipedia">
+                        <span class="chip-color-dot" style="background: #F97316;"></span>
+                        <span>Hypertensive Retinopathy</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Degenerative_myopia" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read Pathological / Degenerative Myopia on Wikipedia">
+                        <span class="chip-color-dot" style="background: #06B6D4;"></span>
+                        <span>Pathological Myopia</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Retinal_disease" target="_blank" rel="noopener noreferrer" class="disease-pill-chip" title="Read other ocular lesions & retinal diseases on Wikipedia">
+                        <span class="chip-color-dot" style="background: #64748B;"></span>
+                        <span>Other Fundus Lesions</span>
+                        <svg class="chip-ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Human-Centric Editorial Quote Divider -->
+            <section class="editorial-quote-divider">
+                <div class="quote-container">
+                    <p class="editorial-serif-quote">
+                        "80% of global visual impairment is preventable or treatable when caught at the earliest microvascular stage."
+                    </p>
+                    <span class="quote-attribution">World Health Organization (WHO) & International Agency for the Prevention of Blindness</span>
+                </div>
+            </section>
+
+            <!-- D. Interactive Diagnostic Workspace -->
+            <section class="workspace-section" id="workspace">
+                <div class="section-editorial-header">
+                    <div class="section-tag-pill">Diagnostic Workspace</div>
+                    <h2 class="section-title">Automated Retinal Image Evaluation</h2>
+                    <p class="section-subtitle">Upload a fundus photograph or choose an authentic clinical sample preset to run neural inference and inspect Grad-CAM saliency heatmaps.</p>
+                </div>
+
+                <div class="workspace-grid">
+                    
+                    <!-- Left Workspace Panel: Input & Sample Presets -->
+                    <div class="workspace-card input-card">
+                        <div class="card-top-bar">
+                            <div class="step-badge">Step 1</div>
+                            <h3 class="panel-heading">Provide Retinal Fundus</h3>
+                        </div>
+
+                        <!-- Drag & Drop Zone -->
+                        <div class="refined-dropzone" id="drop-zone">
+                            <input type="file" id="file-input" accept="image/png, image/jpeg, image/jpg" hidden>
+                            <div class="dropzone-inner">
+                                <div class="dropzone-icon-bubble">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                        <polyline points="17 8 12 3 7 8" />
+                                        <line x1="12" y1="3" x2="12" y2="15" />
+                                    </svg>
+                                </div>
+                                <h4 class="dropzone-prompt">Drag & drop your fundus image here</h4>
+                                <p class="dropzone-subtext">or <button type="button" class="editorial-browse-btn" id="browse-btn">choose file from computer</button></p>
+                                <div class="dropzone-specs-badge">Recommended: 224×224 RGB • PNG / JPEG</div>
+                            </div>
+                        </div>
+
+                        <!-- One-Click Clinical Sample Presets -->
+                        <div class="sample-presets-block">
+                            <div class="presets-header">
+                                <span class="presets-title">Or test with clinical sample cases:</span>
+                            </div>
+                            <div class="sample-chips-grid">
+                                <button type="button" class="sample-pill-btn" data-sample="normal" id="sample-normal">
+                                    <span class="sample-dot" style="background: #10B981;"></span>
+                                    <span class="sample-label">Normal</span>
+                                </button>
+                                <button type="button" class="sample-pill-btn" data-sample="diabetes" id="sample-diabetes">
+                                    <span class="sample-dot" style="background: #EF4444;"></span>
+                                    <span class="sample-label">Diabetic Retinopathy</span>
+                                </button>
+                                <button type="button" class="sample-pill-btn" data-sample="glaucoma" id="sample-glaucoma">
+                                    <span class="sample-dot" style="background: #8B5CF6;"></span>
+                                    <span class="sample-label">Glaucoma</span>
+                                </button>
+                                <button type="button" class="sample-pill-btn" data-sample="cataract" id="sample-cataract">
+                                    <span class="sample-dot" style="background: #F59E0B;"></span>
+                                    <span class="sample-label">Cataract</span>
+                                </button>
+                                <button type="button" class="sample-pill-btn" data-sample="amd" id="sample-amd">
+                                    <span class="sample-dot" style="background: #EC4899;"></span>
+                                    <span class="sample-label">Macular Degeneration</span>
+                                </button>
+                                <button type="button" class="sample-pill-btn" data-sample="myopia" id="sample-myopia">
+                                    <span class="sample-dot" style="background: #06B6D4;"></span>
+                                    <span class="sample-label">High Myopia</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Clinical Safety Advisory -->
+                        <div class="clinical-note-box">
+                            <span class="note-icon">💡</span>
+                            <p class="note-text">
+                                Inference computes over ResNet50 deep convolutional features fine-tuned on the ODIR-5K dataset. Grad-CAM visualizes gradients targeting the last layer (<code>conv5_block3_out</code>).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right Workspace Panel: Diagnostic Results & Grad-CAM -->
+                    <div class="workspace-card results-card">
+                        <div class="card-top-bar results-bar">
+                            <div class="step-badge step-results">Step 2</div>
+                            <h3 class="panel-heading">Clinical Evaluation & Explainability</h3>
+                            <div class="results-actions">
+                                <button type="button" class="tool-btn" id="btn-reset" disabled title="Clear Results">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                                        <path d="M3 3v5h5"/>
+                                    </svg>
+                                    <span>Reset</span>
+                                </button>
+                                <button type="button" class="tool-btn" id="btn-print" disabled title="Print Diagnostic Report">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                        <rect x="6" y="14" width="12" height="8"></rect>
+                                    </svg>
+                                    <span>Print Report</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Empty State Placeholder -->
+                        <div class="workspace-empty-state" id="empty-state">
+                            <div class="retina-illustration">
+                                <div class="retina-rings">
+                                    <div class="retina-orbit ring-a"></div>
+                                    <div class="retina-orbit ring-b"></div>
+                                    <div class="retina-center-disc">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="28" height="28">
+                                            <circle cx="12" cy="12" r="3" />
+                                            <path d="M2 12c3-6 7-9 10-9s7 3 10 9c-3 6-7 9-10 9s-7-3-10-9z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="empty-state-title">Awaiting Fundus Photograph</h4>
+                            <p class="empty-state-desc">Upload a color retinal image on the left or select a sample preset to initiate automated 8-class classification and Grad-CAM saliency mapping.</p>
+                        </div>
+
+                        <!-- Active Diagnostic Content (Revealed on analysis) -->
+                        <div class="diagnostic-content-wrapper" id="diagnostic-content" style="display: none;">
+                            
+                            <!-- Visualizer Row (Original vs Grad-CAM Heatmap with Crossfade Toggle) -->
+                            <div class="visualizer-container">
+                                <div class="visualizer-header">
+                                    <div class="visualizer-title-group">
+                                        <span class="active-layer-indicator" id="layer-label">Original Fundus</span>
+                                        <span class="visualizer-filename" id="preview-filename">retinal_scan.png</span>
+                                    </div>
+                                    <button type="button" class="heatmap-toggle-btn" id="toggle-gradcam-btn" title="Toggle between Original Fundus and Grad-CAM Heatmap">
+                                        <span class="toggle-icon">✦</span>
+                                        <span id="toggle-btn-text">Show Grad-CAM Heatmap</span>
+                                    </button>
+                                </div>
+
+                                <div class="visualizer-viewport">
+                                    <!-- Image Views with Smooth Crossfade -->
+                                    <div class="viewport-layers">
+                                        <img id="preview-image" src="" alt="Retinal Fundus Image" class="fundus-layer active-layer">
+                                        <img id="gradcam-image" src="" alt="Grad-CAM Saliency Heatmap" class="gradcam-layer">
+                                    </div>
+
+                                    <!-- Subtle Laser Scan Animation -->
+                                    <div class="laser-scanner-line" id="scan-laser"></div>
+                                    
+                                    <!-- Live AI Scanning Pill -->
+                                    <div class="scanning-live-pill" id="scanning-badge">
+                                        <span class="spinner-dot"></span>
+                                        <span>Inferring Neural Features...</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Primary Diagnosis Card -->
+                            <div class="clinical-outcome-card" id="primary-card">
+                                <div class="outcome-top-row">
+                                    <div class="outcome-badge-group">
+                                        <span class="category-pill">PRIMARY CLASSIFICATION</span>
+                                        <span class="urgency-pill" id="diag-urgency-pill">ROUTINE</span>
+                                    </div>
+                                    <div class="outcome-confidence">
+                                        <span class="confidence-val" id="diag-confidence-val">--</span>
+                                        <span class="confidence-symbol">%</span>
+                                        <span class="confidence-caption">Confidence</span>
+                                    </div>
+                                </div>
+
+                                <h3 class="outcome-condition-name" id="diag-name">Normal Retina</h3>
+
+                                <!-- Clinical Recommendation Box -->
+                                <div class="outcome-recommendation-box">
+                                    <div class="recom-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="recom-text-col">
+                                        <span class="recom-label">Clinical Recommendation</span>
+                                        <p class="recom-text" id="diag-action">Clinical follow-up notes will appear here.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Pathology Summary -->
+                                <div class="outcome-pathology-notes">
+                                    <span class="pathology-label">Pathological Indicators:</span>
+                                    <p class="pathology-text" id="diag-description">Detailed findings based on deep convolutional feature extraction.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Full-Width Horizontal Multi-Disease Saliency Distribution (8 Classes) -->
+                <div class="horizontal-distribution-card" id="distribution-card">
+                    <div class="distribution-header">
+                        <div class="dist-title-group">
+                            <span class="step-badge step-dist">Step 3</span>
+                            <h3 class="distribution-title">Multi-Disease Saliency Distribution (8 Classes)</h3>
+                        </div>
+                        <p class="distribution-sub">Softmax probabilities across full ODIR-5K spectrum • Real-time circular activation gauges</p>
+                    </div>
+
+                    <div class="circular-meters-grid" id="breakdown-list">
+                        <!-- Populated dynamically via JS with circular gauge cards -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- E. Philosophy Callout & System Architecture -->
+            <section class="philosophy-section" id="how-it-works">
+                <div class="philosophy-quote-wrapper">
+                    <p class="philosophy-quote">
+                        "Designed not to replace the ophthalmologist, but to illuminate every microaneurysm, drusen, and optic disc cup with explainable precision."
+                    </p>
+                    <span class="philosophy-tag">Human-in-the-Loop Clinical Philosophy</span>
+                </div>
+
+                <div class="architecture-grid" id="clinical-validation">
+                    <div class="arch-card">
+                        <div class="arch-icon-box">🧠</div>
+                        <h3 class="arch-card-title">ResNet50 Deep Residual Backbone</h3>
+                        <p class="arch-card-desc">Trained with skip-connections across 50 deep convolutional layers, extracting hierarchical features from fine capillary loops to broad optic nerve topography.</p>
+                    </div>
+
+                    <div class="arch-card">
+                        <div class="arch-icon-box">🔍</div>
+                        <h3 class="arch-card-title">Grad-CAM Spatial Interpretability</h3>
+                        <p class="arch-card-desc">Backpropagates gradient activations from <code>conv5_block3_out</code> to generate transparent, color-mapped visual heatmaps highlighting exact lesions.</p>
+                    </div>
+
+                    <div class="arch-card">
+                        <div class="arch-icon-box">📊</div>
+                        <h3 class="arch-card-title">ODIR-5K Multi-Class Ground Truth</h3>
+                        <p class="arch-card-desc">Benchmarked across 5,000 real-world color fundus images evaluated by leading hospital ophthalmologists across 8 diagnostic categories.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Editorial Multi-Column SaaS Footer (Light Theme) -->
+            <footer class="editorial-footer">
+                <!-- Top Accent Gradient Line -->
+                <div class="footer-gradient-accent"></div>
+
+                <div class="footer-main-grid">
+                    <!-- Column 1: Brand & Clinical Core -->
+                    <div class="footer-brand-column">
+                        <div class="footer-brand-header">
+                            <div class="footer-aperture-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                                    <circle cx="12" cy="12" r="3.5" />
+                                    <path d="M3 12c2.8-5.5 6.5-8.5 9-8.5s6.2 3 9 8.5c-2.8 5.5-6.5 8.5-9 8.5s-6.2-3-9-8.5z" stroke-linecap="round" />
+                                    <circle cx="12" cy="12" r="8" stroke-dasharray="2 3" stroke-width="1.2" opacity="0.6"/>
+                                </svg>
+                            </div>
+                            <div class="brand-text-group">
+                                <span class="brand-name">OcuScan <span class="brand-badge-ai">AI</span></span>
+                                <span class="brand-discipline">Ophthalmology Intelligence</span>
+                            </div>
+                        </div>
+
+                        <p class="footer-brand-desc">
+                            Next-generation ophthalmic triage platform providing rapid 8-class retinal disease classification with explainable Grad-CAM heatmaps for certified clinical decision support.
+                        </p>
+                    </div>
+
+                    <!-- Column 2: Platform Navigation -->
+                    <div class="footer-nav-column">
+                        <h4 class="footer-column-title">Platform</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="#workspace" class="footer-nav-link">Diagnostic Workspace</a></li>
+                            <li><a href="#disease-classes" class="footer-nav-link">8 Disease Pathologies</a></li>
+                            <li><a href="#how-it-works" class="footer-nav-link">Deep Learning Architecture</a></li>
+                            <li><a href="#clinical-validation" class="footer-nav-link">ODIR-5K Validation</a></li>
+                            <li><a href="#distribution-card" class="footer-nav-link">Saliency Distribution</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 3: Clinical & Model Specs -->
+                    <div class="footer-nav-column">
+                        <h4 class="footer-column-title">Pathology & ML</h4>
+                        <ul class="footer-link-list">
+                            <li><a href="https://en.wikipedia.org/wiki/Diabetic_retinopathy" target="_blank" rel="noopener noreferrer" class="footer-nav-link">Diabetic Retinopathy ↗</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Glaucoma" target="_blank" rel="noopener noreferrer" class="footer-nav-link">Glaucoma CDR ↗</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Macular_degeneration" target="_blank" rel="noopener noreferrer" class="footer-nav-link">Macular Degeneration ↗</a></li>
+                            <li><a href="https://en.wikipedia.org/wiki/Fundus_(eye)" target="_blank" rel="noopener noreferrer" class="footer-nav-link">Retinal Biomarkers ↗</a></li>
+                            <li><a href="https://arxiv.org/abs/1610.02391" target="_blank" rel="noopener noreferrer" class="footer-nav-link">Grad-CAM Paper ↗</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Column 4: Developer & Social Connect (LinkedIn, GitHub, Email, LeetCode) -->
+                    <div class="footer-connect-column">
+                        <div class="connect-header">
+                            <h4 class="footer-column-title">Engineering & Connect</h4>
+                        </div>
+
+                        <div class="footer-social-grid">
+                            <!-- LinkedIn -->
+                            <a href="https://www.linkedin.com/in/samarth-purant-0560a2301/" target="_blank" rel="noopener noreferrer" class="social-card-pill social-linkedin" title="Connect with Samarth Purant on LinkedIn">
+                                <div class="social-icon-wrapper">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                        <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                                    </svg>
+                                </div>
+                                <div class="social-text-wrapper">
+                                    <span class="social-platform">LinkedIn</span>
+                                    <span class="social-handle">@samarth-purant</span>
+                                </div>
+                                <svg class="social-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </a>
+
+                            <!-- GitHub -->
+                            <a href="https://github.com/sam190905" target="_blank" rel="noopener noreferrer" class="social-card-pill social-github" title="View Samarth Purant on GitHub (@sam190905)">
+                                <div class="social-icon-wrapper">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="social-text-wrapper">
+                                    <span class="social-platform">GitHub</span>
+                                    <span class="social-handle">@sam190905</span>
+                                </div>
+                                <svg class="social-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </a>
+
+                            <!-- Email -->
+                            <a href="mailto:samarthpurant018@gmail.com" class="social-card-pill social-email" title="Email Samarth Purant (samarthpurant018@gmail.com)">
+                                <div class="social-icon-wrapper">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="social-text-wrapper">
+                                    <span class="social-platform">Email</span>
+                                    <span class="social-handle">samarthpurant018@gmail.com</span>
+                                </div>
+                                <svg class="social-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </a>
+
+                            <!-- LeetCode -->
+                            <a href="https://leetcode.com/u/Sam190905/" target="_blank" rel="noopener noreferrer" class="social-card-pill social-leetcode" title="View LeetCode Coding Profile (@Sam190905)">
+                                <div class="social-icon-wrapper">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                        <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .666-1.607 2.6 2.6 0 0 1 .388-.392l4.255-4.556 4.845-5.184c.54-.579.516-1.479-.063-2.019A1.372 1.372 0 0 0 13.483 0zm-2.88 7.283a1.39 1.39 0 0 0-1.39 1.39c0 .768.622 1.39 1.39 1.39h7.795a1.39 1.39 0 0 0 1.39-1.39 1.39 1.39 0 0 0-1.39-1.39H10.603z"/>
+                                    </svg>
+                                </div>
+                                <div class="social-text-wrapper">
+                                    <span class="social-platform">LeetCode</span>
+                                    <span class="social-handle">@Sam190905</span>
+                                </div>
+                                <svg class="social-arrow" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                                    <polyline points="7 7 17 7 17 17"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Copyright & Architecture Row -->
+                <div class="footer-bottom-row">
+                    <div class="copyright-group">
+                        <span>© 2026 OcuScan AI Systems.</span>
+                        <span class="footer-separator">•</span>
+                        <span>Architected & Engineered by <strong>Samarth Purant</strong></span>
+                    </div>
+
+                    <div class="footer-tech-specs">
+                        <span class="tech-spec-badge">ResNet50 Backbone</span>
+                        <span class="tech-spec-badge">Grad-CAM Saliency</span>
+                        <span class="tech-spec-badge">ODIR-5K 0.94 AUC</span>
+                    </div>
+
+                    <a href="#" class="footer-back-to-top" id="footer-scroll-top">
+                        <span>Back to top</span>
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <polyline points="5 12 12 5 19 12"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- Floating Back-to-Top Button -->
+    <button type="button" class="floating-scroll-top-btn" id="scroll-top-btn" aria-label="Scroll back to top" title="Scroll back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="16" height="16">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+    </button>
+
+    <!-- Application Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+# ==============================================================================
+# OccuScan AI - Git Ignore Configuration
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Deep Learning Model Weights & Checkpoints (Exceeds GitHub 100MB File Limit)
+# ------------------------------------------------------------------------------
+# Prevent 100MB+ model weights (e.g., best_resnet50_model_old_717mb.keras) from blocking git push
+*.keras
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.pb
+*.weights.h5
+*.ckpt
+/checkpoint
+/checkpoints/
+!static/checkpoints/
+
+# Keep the models directory structure in git
+!models/.gitkeep
+
+# ------------------------------------------------------------------------------
+# 2. Python Environment & Bytecode Cache
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyd
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / Packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ------------------------------------------------------------------------------
+# 3. Raw Datasets & Large Archives (ODIR 5K / Local Downloads)
+# ------------------------------------------------------------------------------
+datasets/
+dataset/
+data/
+raw_data/
+archive/
+archive (2)/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# ------------------------------------------------------------------------------
+# 4. Jupyter Notebook & Colab Checkpoints
+# ------------------------------------------------------------------------------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ------------------------------------------------------------------------------
+# 5. Environment Variables & Credentials
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+*.key
+*.pem
+
+# ------------------------------------------------------------------------------
+# 6. Operating System Specific Files
+# ------------------------------------------------------------------------------
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# ------------------------------------------------------------------------------
+# 7. IDE & Editor Workspace Settings
+# ------------------------------------------------------------------------------
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ------------------------------------------------------------------------------
+# 8. Logs, Profiling & Diagnostics
+# ------------------------------------------------------------------------------
+*.log
+logs/
+.pytest_cache/
+.coverage
+htmlcov/
