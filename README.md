@@ -4,7 +4,7 @@
 [![TensorFlow 2.15+](https://img.shields.io/badge/TensorFlow-2.15%2B-orange.svg?logo=tensorflow)](https://tensorflow.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Primary Pipeline](https://img.shields.io/badge/Primary%20Pipeline-Resnet50.ipynb-emerald.svg)](Resnet50.ipynb)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 
 **OccuScan AI** is an end-to-end ophthalmic computer vision and clinical decision support system designed to screen, classify, and localize retinal abnormalities from digital fundus photographs. 
 
