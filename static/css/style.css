@@ -1882,6 +1882,143 @@ body {
     box-shadow: 0 12px 30px rgba(16, 185, 129, 0.16);
 }
 
+.circular-meter-card.condition-detected {
+    background: #FFFFFF;
+    border-color: #CBD5E1;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* Multi-Label Detection Header on Meter Card */
+.card-status-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+    margin-bottom: 2px;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.status-pill .pill-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.status-pill.detected {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.status-pill.clear {
+    color: #64748B;
+    background: #F1F5F9;
+    border-color: #E2E8F0;
+}
+
+/* Cutoff indicator row */
+.cutoff-indicator-row {
+    margin: 4px 0 6px 0;
+}
+
+.cutoff-label {
+    font-size: 0.65rem;
+    color: #64748B;
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 6px;
+    border: 1px solid #E2E8F0;
+    font-family: var(--font-mono);
+}
+
+.cutoff-label strong {
+    color: #1E293B;
+}
+
+/* Co-Occurring Detections in Primary Outcome Card */
+.co-occurring-block {
+    margin: 12px 0 16px 0;
+    padding: 12px 14px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+}
+
+.co-occurring-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.co-occurring-icon {
+    color: #F59E0B;
+    font-size: 0.9rem;
+}
+
+.co-occurring-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.co-occurring-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.co-occurring-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    border: 1px solid;
+    font-size: 0.75rem;
+}
+
+.chip-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.chip-name {
+    font-weight: 700;
+}
+
+.chip-pct {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.chip-cutoff {
+    font-size: 0.68rem;
+    color: #64748B;
+}
+
 .top-match-badge {
     position: absolute;
     top: -10px;

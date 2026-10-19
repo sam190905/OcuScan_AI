@@ -282,18 +282,78 @@ document.addEventListener("DOMContentLoaded", () => {
         diagUrgency.style.color = accentColor;
         diagUrgency.style.borderColor = hexToRgba(accentColor, 0.35);
 
-        // 3. Render Multi-Disease Probability Breakdown
-        renderBreakdownBars(data.breakdown);
+        // Co-Occurring Detections Box
+        const coOccurBox = document.getElementById("co-occurring-box");
+        const coOccurChips = document.getElementById("co-occurring-chips");
+        if (coOccurBox && coOccurChips) {
+            if (data.co_occurring && data.co_occurring.length > 0) {
+                coOccurChips.innerHTML = "";
+                data.co_occurring.forEach(item => {
+                    const chip = document.createElement("div");
+                    chip.className = "co-occurring-chip";
+                    const itemColor = item.color || "#7C3AED";
+                    const cutoff = item.threshold_pct || 20.0;
+                    chip.style.borderColor = hexToRgba(itemColor, 0.35);
+                    chip.style.background = hexToRgba(itemColor, 0.08);
+                    chip.innerHTML = `
+                        <span class="chip-dot" style="background: ${itemColor};"></span>
+                        <span class="chip-name" style="color: ${itemColor};">${item.disease}</span>
+                        <span class="chip-pct">${item.percentage}%</span>
+                        <span class="chip-cutoff">(cutoff ${cutoff}%)</span>
+                    `;
+                    coOccurChips.appendChild(chip);
+                });
+                coOccurBox.style.display = "block";
+            } else {
+                coOccurBox.style.display = "none";
+            }
+        }
+
+        // 3. Render Multi-Disease Probability Breakdown with Cutoff Thresholds & Detection Badges
+        renderBreakdownBars(data.breakdown, data.primary_diagnosis);
     }
 
-    function renderBreakdownBars(breakdown) {
+    const CLINICAL_THRESHOLDS_MAP = {
+        "Age-related Macular Degeneration (AMD)": 10.0,
+        "Cataract": 18.0,
+        "Diabetes": 20.0,
+        "Glaucoma": 12.0,
+        "Hypertension": 50.0,
+        "Myopia": 20.0,
+        "Normal": 35.0,
+        "Others": 10.0
+    };
+
+    function renderBreakdownBars(breakdown, primaryDiagnosis) {
         breakdownList.innerHTML = "";
+
+        const isNormalPrimary = (primaryDiagnosis === "Normal");
 
         breakdown.forEach((item, index) => {
             const card = document.createElement("div");
-            const isTop = index === 0 && item.percentage > 0;
+            const isTop = index === 0;
             const barColor = item.color || "#7C3AED";
-            card.className = `circular-meter-card ${isTop ? 'top-match' : ''}`;
+
+            // Safe cutoff lookup guaranteeing a real number
+            const cutoffVal = (item.threshold_pct !== undefined && item.threshold_pct !== null)
+                ? item.threshold_pct
+                : (CLINICAL_THRESHOLDS_MAP[item.disease] || 20.0);
+
+            // Mutual exclusivity enforcement: If Normal is diagnosed, no other disease can be detected!
+            let isDetected = false;
+            if (isNormalPrimary) {
+                isDetected = (item.disease === "Normal");
+            } else {
+                if (item.disease === "Normal") {
+                    isDetected = false; // Disease detected -> Normal is clear
+                } else {
+                    isDetected = (item.is_detected !== undefined && item.is_detected !== null)
+                        ? item.is_detected
+                        : (item.percentage >= cutoffVal);
+                }
+            }
+
+            card.className = `circular-meter-card ${isDetected ? 'condition-detected' : ''} ${isTop ? 'top-match' : ''}`;
             card.id = `meter-card-${item.class_id}`;
 
             // Clean concise display name
@@ -325,8 +385,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 wikiUrl = "https://en.wikipedia.org/wiki/Retinal_disease";
             }
 
+            const statusBadge = isDetected
+                ? `<span class="status-pill detected" style="color: ${barColor}; background: ${hexToRgba(barColor, 0.12)}; border-color: ${hexToRgba(barColor, 0.35)};"><span class="pill-dot"></span>DETECTED</span>`
+                : `<span class="status-pill clear"><span class="pill-dot" style="background: #94A3B8;"></span>CLEAR</span>`;
+
             card.innerHTML = `
                 ${isTop ? '<div class="top-match-badge">Primary Match</div>' : ''}
+                <div class="card-status-header">
+                    ${statusBadge}
+                </div>
                 <div class="gauge-wrapper">
                     <svg class="circular-gauge-svg" viewBox="0 0 80 80">
                         <circle class="gauge-bg" cx="40" cy="40" r="32" />
@@ -334,10 +401,13 @@ document.addEventListener("DOMContentLoaded", () => {
                             style="stroke: ${barColor}; stroke-dasharray: ${GAUGE_CIRCUMFERENCE}; stroke-dashoffset: ${GAUGE_CIRCUMFERENCE};" />
                     </svg>
                     <div class="gauge-value-center">
-                        <span class="gauge-pct" id="gauge-pct-${item.class_id}" style="color: ${isTop ? barColor : 'var(--text-primary)'}">
+                        <span class="gauge-pct" id="gauge-pct-${item.class_id}" style="color: ${isDetected ? barColor : 'var(--text-primary)'}">
                             0.0%
                         </span>
                     </div>
+                </div>
+                <div class="cutoff-indicator-row">
+                    <span class="cutoff-label">Cutoff: <strong>${cutoffVal}%</strong></span>
                 </div>
                 <div class="meter-info">
                     <a href="${wikiUrl}" target="_blank" rel="noopener noreferrer" class="meter-name" title="Read ${item.disease} on Wikipedia">${displayName} ↗</a>

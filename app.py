@@ -156,8 +156,20 @@ def generate_gradcam(pil_image: Image.Image, img_tensor: np.ndarray, top_class_i
         print(f"Grad-CAM generation error: {e}")
         return ""
 
+# Calibrated Clinical Decision Thresholds from 10% Holdout Validation
+CLINICAL_THRESHOLDS = {
+    "Age-related Macular Degeneration (AMD)": 0.10,
+    "Cataract": 0.18,
+    "Diabetes": 0.20,
+    "Glaucoma": 0.12,
+    "Hypertension": 0.50,
+    "Myopia": 0.20,
+    "Normal": 0.35,
+    "Others": 0.10
+}
+
 def compute_diagnosis(img_array: np.ndarray, pil_img: Image.Image = None):
-    """Run model inference and generate clinical diagnostic payload with Grad-CAM."""
+    """Run model inference and generate clinical diagnostic payload with Grad-CAM and multi-label thresholds."""
     model = get_model()
     raw_probs = model.predict(img_array, verbose=0)[0]
     
@@ -171,21 +183,65 @@ def compute_diagnosis(img_array: np.ndarray, pil_img: Image.Image = None):
             "description": "",
             "action": ""
         })
+        threshold = CLINICAL_THRESHOLDS.get(name, 0.20)
+        is_detected = bool(float(prob) >= threshold)
         breakdown.append({
             "class_id": idx,
             "disease": name,
             "confidence": float(prob),
             "percentage": round(float(prob) * 100, 2),
+            "threshold_pct": round(threshold * 100, 1),
+            "is_detected": is_detected,
+            "status": "DETECTED" if is_detected else "CLEAR",
             "tag": meta["tag"],
             "color": meta["color"]
         })
 
     # Sort descending by confidence
     breakdown.sort(key=lambda x: x["confidence"], reverse=True)
-    top = breakdown[0]
-    meta = DISEASE_INSIGHTS.get(top["disease"], {})
+    
+    # Mutual Exclusivity Rule: Normal vs Pathological Disease
+    normal_item = next((item for item in breakdown if item["disease"] == "Normal"), None)
+    disease_items = [item for item in breakdown if item["disease"] != "Normal"]
+    
+    is_normal_detected = bool(normal_item and normal_item["confidence"] >= (normal_item["threshold_pct"] / 100.0))
+    top_disease = max(disease_items, key=lambda x: x["confidence"]) if disease_items else None
+    
+    if is_normal_detected and (top_disease is None or normal_item["confidence"] >= top_disease["confidence"]):
+        # If Normal is detected: suppress all disease detections to CLEAR
+        top = normal_item
+        top["is_detected"] = True
+        top["status"] = "DETECTED"
+        for d in disease_items:
+            d["is_detected"] = False
+            d["status"] = "CLEAR"
+        detected = [normal_item]
+        co_occurring = []
+    else:
+        # A pathological condition takes precedence
+        detected_diseases = [d for d in disease_items if d["is_detected"]]
+        if detected_diseases:
+            top = detected_diseases[0]
+            if normal_item:
+                normal_item["is_detected"] = False
+                normal_item["status"] = "CLEAR"
+            detected = detected_diseases
+            co_occurring = [
+                {
+                    "disease": d["disease"],
+                    "percentage": d["percentage"],
+                    "threshold_pct": d["threshold_pct"],
+                    "color": d["color"]
+                }
+                for d in detected_diseases if d["disease"] != top["disease"]
+            ]
+        else:
+            # Fallback if no category passed threshold
+            top = breakdown[0]
+            detected = []
+            co_occurring = []
 
-    # Generate Grad-CAM for the top predicted disease
+    # Generate Grad-CAM for the leading detected disease
     gradcam_url = ""
     if pil_img is not None:
         gradcam_url = generate_gradcam(pil_img, img_array, top["class_id"])
@@ -194,6 +250,10 @@ def compute_diagnosis(img_array: np.ndarray, pil_img: Image.Image = None):
         "primary_diagnosis": top["disease"],
         "confidence": top["confidence"],
         "confidence_pct": top["percentage"],
+        "threshold_pct": top["threshold_pct"],
+        "is_detected": top["is_detected"],
+        "co_occurring": co_occurring,
+        "total_detected_count": len(detected),
         "urgency": meta.get("urgency", "Review Required"),
         "color": meta.get("color", "#10b981"),
         "description": meta.get("description", ""),
@@ -212,6 +272,7 @@ async def serve_index():
 async def get_system_info():
     return {
         "model_architecture": "ResNet50 + Deep Dense Head (3x512)",
+        "model_type": "Multi-Label Fine-Tuned (Independent Sigmoid)",
         "input_resolution": "224x224 RGB",
         "classes_count": len(CLASS_NAMES),
         "classes": list(CLASS_NAMES.values()),

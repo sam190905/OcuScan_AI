@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OcuScan AI — Clinical-Grade Retinal Disease Screening Platform</title>
-    <meta name="description" content="Production-grade AI ophthalmic decision support platform. Instant 8-category ocular disease classification from retinal fundus photographs powered by ResNet50 and explainable Grad-CAM heatmaps.">
+    <meta name="description" content="Production-grade AI ophthalmic decision support platform. Instant 8-category multi-label ocular disease screening from retinal fundus photographs powered by ResNet50 and explainable Grad-CAM heatmaps.">
     
     <!-- Modern Editorial Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +42,7 @@
 
                 <nav class="nav-links">
                     <a href="#how-it-works" class="nav-link">How It Works</a>
-                    <a href="#disease-classes" class="nav-link">8 Disease Classes</a>
+                    <a href="#disease-classes" class="nav-link">8 Disease Conditions</a>
                     <a href="#workspace" class="nav-link">Diagnostic Workspace</a>
                     <a href="#clinical-validation" class="nav-link">Clinical Validation</a>
                 </nav>
@@ -281,7 +281,7 @@
             <div class="hero-announcement-strip">
                 <div class="strip-content">
                     <span class="strip-sparkle">✦</span>
-                    <span class="strip-text">Open-access clinical decision support — Upload any standard color fundus photograph for instant 8-class triage</span>
+                    <span class="strip-text">Open-access clinical decision support — Upload any standard color fundus photograph for instant multi-label triage</span>
                     <a href="#workspace" class="strip-arrow-link">Open Workspace →</a>
                 </div>
             </div>
@@ -481,7 +481,7 @@
                                 </div>
                             </div>
                             <h4 class="empty-state-title">Awaiting Fundus Photograph</h4>
-                            <p class="empty-state-desc">Upload a color retinal image on the left or select a sample preset to initiate automated 8-class classification and Grad-CAM saliency mapping.</p>
+                            <p class="empty-state-desc">Upload a color retinal image on the left or select a sample preset to initiate automated 8-condition multi-label screening and Grad-CAM saliency mapping.</p>
                         </div>
 
                         <!-- Active Diagnostic Content (Revealed on analysis) -->
@@ -522,7 +522,7 @@
                             <div class="clinical-outcome-card" id="primary-card">
                                 <div class="outcome-top-row">
                                     <div class="outcome-badge-group">
-                                        <span class="category-pill">PRIMARY CLASSIFICATION</span>
+                                        <span class="category-pill">PRIMARY MULTI-LABEL DIAGNOSIS</span>
                                         <span class="urgency-pill" id="diag-urgency-pill">ROUTINE</span>
                                     </div>
                                     <div class="outcome-confidence">
@@ -533,6 +533,15 @@
                                 </div>
 
                                 <h3 class="outcome-condition-name" id="diag-name">Normal Retina</h3>
+
+                                <!-- Multi-Label Co-Occurring Detections Box -->
+                                <div class="co-occurring-block" id="co-occurring-box" style="display: none;">
+                                    <div class="co-occurring-header">
+                                        <span class="co-occurring-icon">✦</span>
+                                        <span class="co-occurring-title">Co-Occurring Detections (Threshold Exceeded):</span>
+                                    </div>
+                                    <div class="co-occurring-chips" id="co-occurring-chips"></div>
+                                </div>
 
                                 <!-- Clinical Recommendation Box -->
                                 <div class="outcome-recommendation-box">
@@ -566,9 +575,9 @@
                     <div class="distribution-header">
                         <div class="dist-title-group">
                             <span class="step-badge step-dist">Step 3</span>
-                            <h3 class="distribution-title">Multi-Disease Saliency Distribution (8 Classes)</h3>
+                            <h3 class="distribution-title">Multi-Label Disease Saliency Distribution (8 Conditions)</h3>
                         </div>
-                        <p class="distribution-sub">Softmax probabilities across full ODIR-5K spectrum • Real-time circular activation gauges</p>
+                        <p class="distribution-sub">Independent sigmoid multi-label probabilities across full ODIR-5K spectrum • Real-time circular activation gauges</p>
                     </div>
 
                     <div class="circular-meters-grid" id="breakdown-list">
@@ -601,7 +610,7 @@
 
                     <div class="arch-card">
                         <div class="arch-icon-box">📊</div>
-                        <h3 class="arch-card-title">ODIR-5K Multi-Class Ground Truth</h3>
+                        <h3 class="arch-card-title">ODIR-5K Multi-Label Ground Truth</h3>
                         <p class="arch-card-desc">Benchmarked across 5,000 real-world color fundus images evaluated by leading hospital ophthalmologists across 8 diagnostic categories.</p>
                     </div>
                 </div>
@@ -630,7 +639,7 @@
                         </div>
 
                         <p class="footer-brand-desc">
-                            Next-generation ophthalmic triage platform providing rapid 8-class retinal disease classification with explainable Grad-CAM heatmaps for certified clinical decision support.
+                            Next-generation ophthalmic triage platform providing rapid 8-condition multi-label retinal disease screening with explainable Grad-CAM heatmaps for certified clinical decision support.
                         </p>
                     </div>
 
