@@ -1,3 +1,13 @@
+---
+title: OcuScan AI - Clinical Retinal Disease Screening
+emoji: 👁️
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # OccuScan AI: Ocular Disease Recognition
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python)](https://www.python.org/)

@@ -1,17 +1,15 @@
 # ==============================================================================
-# OcuScan AI — Production Multi-Label Inference Container
+# OcuScan AI — Production Multi-Label Inference Container (Hugging Face Spaces)
 # ==============================================================================
 
 FROM python:3.11-slim
 
-# Set environment optimization flags
+# Set environment optimization flags & default Hugging Face Spaces port (7860)
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8000 \
+    PORT=7860 \
     TF_CPP_MIN_LOG_LEVEL=2 \
     TF_ENABLE_ONEDNN_OPTS=0
-
-WORKDIR /app
 
 # Install minimal OS dependencies for image processing & security certificates
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -19,22 +17,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python requirements (using pre-built wheels for fast install)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Set up standard non-root user (UID 1000) for Hugging Face Spaces security
+RUN useradd -m -u 1000 user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
 
-# Copy application files
-COPY app.py class_indices.json ./
-COPY static/ ./static/
-COPY templates/ ./templates/
+WORKDIR $HOME/app
 
-# Ensure models directory exists
-RUN mkdir -p models
+# Install Python requirements
+COPY --chown=user:user requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
 
-# Copy local model weights if present (otherwise downloaded via startup hook)
-COPY models/ ./models/
+# Copy application files and assets
+COPY --chown=user:user . $HOME/app
 
-EXPOSE 8000
+# Ensure models directory exists with correct permissions
+RUN mkdir -p $HOME/app/models
 
-# Launch production ASGI server
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 7860
+
+# Launch production ASGI server on Hugging Face port 7860
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
