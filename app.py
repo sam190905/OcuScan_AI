@@ -95,9 +95,46 @@ DISEASE_INSIGHTS = {
 # Global cached model
 _MODEL = None
 
+def ensure_model_weights():
+    """Ensure best_resnet50_model.keras exists on disk, downloading if deployed to cloud."""
+    if os.path.exists(MODEL_PATH):
+        return
+    
+    os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
+    model_url = os.environ.get("MODEL_DOWNLOAD_URL")
+    hf_repo = os.environ.get("HF_MODEL_REPO", "sam190905/OcuScan-ResNet50")
+    
+    print(f"Model not found at {MODEL_PATH}. Checking cloud storage...")
+    
+    # Priority 1: Direct URL (GitHub Release asset, Cloudflare R2, S3, etc.)
+    if model_url:
+        print(f"Downloading weights from MODEL_DOWNLOAD_URL: {model_url}...")
+        import urllib.request
+        urllib.request.urlretrieve(model_url, MODEL_PATH)
+        print("Download complete.")
+        return
+    
+    # Priority 2: Hugging Face Model Hub (100% free unlimited storage)
+    try:
+        from huggingface_hub import hf_hub_download
+        print(f"Downloading weights from Hugging Face Hub repository '{hf_repo}'...")
+        hf_hub_download(
+            repo_id=hf_repo,
+            filename="best_resnet50_model.keras",
+            local_dir=os.path.dirname(MODEL_PATH),
+            local_dir_use_symlinks=False
+        )
+        print("Model downloaded successfully from Hugging Face Hub.")
+    except Exception as e:
+        raise RuntimeError(
+            f"Model file missing at {MODEL_PATH} and automatic cloud download failed: {e}. "
+            "Please set MODEL_DOWNLOAD_URL in Render environment variables or upload the model."
+        )
+
 def get_model():
     global _MODEL
     if _MODEL is None:
+        ensure_model_weights()
         if not os.path.exists(MODEL_PATH):
             raise RuntimeError(f"Trained model not found at: {MODEL_PATH}")
         print(f"Loading ResNet50 model from: {MODEL_PATH}")
