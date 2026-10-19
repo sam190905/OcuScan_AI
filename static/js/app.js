@@ -175,8 +175,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.detail || "Diagnosis failed on server.");
+                let msg = `Server returned HTTP ${response.status}`;
+                try {
+                    const err = await response.json();
+                    msg = err.detail || msg;
+                } catch (_) {
+                    try {
+                        const txt = await response.text();
+                        if (txt && txt.length < 200) msg = txt;
+                    } catch (__) {}
+                }
+                throw new Error(msg);
             }
 
             const data = await response.json();
@@ -200,8 +209,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.detail || "Sample diagnosis failed.");
+                let msg = `Server returned HTTP ${response.status}`;
+                try {
+                    const err = await response.json();
+                    msg = err.detail || msg;
+                } catch (_) {
+                    try {
+                        const txt = await response.text();
+                        if (txt && txt.length < 200) msg = txt;
+                    } catch (__) {}
+                }
+                throw new Error(msg);
             }
 
             const data = await response.json();

@@ -100,42 +100,46 @@ DISEASE_INSIGHTS = {
 
 # Global cached model
 _MODEL = None
+DEFAULT_RELEASE_URL = "https://github.com/sam190905/OcuScan_AI/releases/download/v1.0.0/best_resnet50_model.keras"
 
 def ensure_model_weights():
-    """Ensure best_resnet50_model.keras exists on disk, downloading if deployed to cloud."""
-    if os.path.exists(MODEL_PATH):
+    """Ensure best_resnet50_model.keras exists on disk, downloading from GitHub Release if on cloud."""
+    if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 100_000_000:
         return
     
     os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
-    model_url = os.environ.get("MODEL_DOWNLOAD_URL")
-    hf_repo = os.environ.get("HF_MODEL_REPO", "sam190905/OcuScan-ResNet50")
+    model_url = os.environ.get("MODEL_DOWNLOAD_URL", DEFAULT_RELEASE_URL).strip()
     
-    print(f"Model not found at {MODEL_PATH}. Checking cloud storage...")
+    print(f"[OcuScan Cloud] Model file missing. Initiating download from: {model_url}")
+    tmp_path = MODEL_PATH + ".tmp"
     
-    # Priority 1: Direct URL (GitHub Release asset, Cloudflare R2, S3, etc.)
-    if model_url:
-        print(f"Downloading weights from MODEL_DOWNLOAD_URL: {model_url}...")
-        import urllib.request
-        urllib.request.urlretrieve(model_url, MODEL_PATH)
-        print("Download complete.")
-        return
-    
-    # Priority 2: Hugging Face Model Hub (100% free unlimited storage)
     try:
-        from huggingface_hub import hf_hub_download
-        print(f"Downloading weights from Hugging Face Hub repository '{hf_repo}'...")
-        hf_hub_download(
-            repo_id=hf_repo,
-            filename="best_resnet50_model.keras",
-            local_dir=os.path.dirname(MODEL_PATH),
-            local_dir_use_symlinks=False
-        )
-        print("Model downloaded successfully from Hugging Face Hub.")
+        import urllib.request
+        req = urllib.request.Request(model_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=120) as resp, open(tmp_path, 'wb') as out_f:
+            total_size = int(resp.headers.get('content-length', 0))
+            downloaded = 0
+            chunk_size = 1024 * 1024 # 1 MB chunks
+            
+            while True:
+                chunk = resp.read(chunk_size)
+                if not chunk:
+                    break
+                out_f.write(chunk)
+                downloaded += len(chunk)
+                if total_size > 0 and downloaded % (10 * 1024 * 1024) < chunk_size:
+                    pct = int(downloaded * 100 / total_size)
+                    print(f"[OcuScan Cloud] Download progress: {downloaded / (1024*1024):.1f} MB / {total_size / (1024*1024):.1f} MB ({pct}%)")
+        
+        # Atomically move temporary file to final model path
+        if os.path.exists(MODEL_PATH):
+            os.remove(MODEL_PATH)
+        os.rename(tmp_path, MODEL_PATH)
+        print(f"[OcuScan Cloud] Weights download complete! Stored at: {MODEL_PATH} ({os.path.getsize(MODEL_PATH)/(1024*1024):.1f} MB)")
     except Exception as e:
-        raise RuntimeError(
-            f"Model file missing at {MODEL_PATH} and automatic cloud download failed: {e}. "
-            "Please set MODEL_DOWNLOAD_URL in Render environment variables or upload the model."
-        )
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+        raise RuntimeError(f"Failed to download model weights from {model_url}: {e}")
 
 def get_model():
     global _MODEL
@@ -143,10 +147,20 @@ def get_model():
         ensure_model_weights()
         if not os.path.exists(MODEL_PATH):
             raise RuntimeError(f"Trained model not found at: {MODEL_PATH}")
-        print(f"Loading ResNet50 model from: {MODEL_PATH}")
-        _MODEL = tf.keras.models.load_model(MODEL_PATH)
+        print(f"Loading ResNet50 model (compile=False for lean memory footprint) from: {MODEL_PATH}")
+        _MODEL = tf.keras.models.load_model(MODEL_PATH, compile=False)
         print("Model loaded successfully into memory.")
     return _MODEL
+
+@app.on_event("startup")
+async def startup_preload():
+    """Pre-warm model into memory on server boot to ensure instant HTTP inference and prevent timeouts."""
+    try:
+        print("[OcuScan Startup] Pre-warming ResNet50 model weights...")
+        get_model()
+        print("[OcuScan Startup] ResNet50 is hot and ready for instant inference.")
+    except Exception as err:
+        print(f"[OcuScan Startup Warning] Model preload failed during boot: {err}")
 
 def preprocess_pil_image(image: Image.Image, target_size=(224, 224)):
     """Convert PIL image to preprocessed float32 tensor."""
