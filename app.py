@@ -11,7 +11,13 @@ from pydantic import BaseModel
 # Suppress verbose TensorFlow logs
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
-import gradio as gr
+
+try:
+    import gradio as gr
+    HAS_GRADIO = True
+except ImportError:
+    HAS_GRADIO = False
+    gr = None
 
 app = FastAPI(
     title="OccuScan AI - Ocular Disease Recognition Platform",
@@ -354,42 +360,40 @@ async def predict_sample_image(req: SampleRequest):
         raise HTTPException(status_code=500, detail=f"Inference error: {str(e)}")
 
 # ---------------------------------------------------------------------------
-# Hugging Face Space Gradio Compatibility Wrapper
-# Allows hosting on 100% FREE Gradio Space tier (16 GB RAM, no credit card)
-# while serving our custom interactive dashboard at the root URL (/)
+# Hugging Face Space Gradio Compatibility Wrapper (Optional)
+# If gradio is installed, mounts fallback at /gradio; otherwise pure FastAPI
 # ---------------------------------------------------------------------------
-def _gradio_analyze(pil_img):
-    if pil_img is None:
-        return {"error": "Please upload a valid retinal fundus image."}
-    try:
-        tensor = preprocess_pil_image(pil_img)
-        res = compute_diagnosis(tensor, pil_img)
-        # Exclude large base64 strings from JSON preview
-        return {k: v for k, v in res.items() if k not in ("gradcam_heatmap", "original_image")}
-    except Exception as err:
-        return {"error": str(err)}
+if HAS_GRADIO:
+    def _gradio_analyze(pil_img):
+        if pil_img is None:
+            return {"error": "Please upload a valid retinal fundus image."}
+        try:
+            tensor = preprocess_pil_image(pil_img)
+            res = compute_diagnosis(tensor, pil_img)
+            return {k: v for k, v in res.items() if k not in ("gradcam_heatmap", "original_image")}
+        except Exception as err:
+            return {"error": str(err)}
 
-with gr.Blocks(title="OcuScan AI - Retinal Diagnostics") as demo:
-    gr.HTML("""
-    <div style="text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: 12px; margin-bottom: 20px;">
-        <h1 style="color: #60a5fa; margin: 0 0 8px 0; font-size: 26px;">👁️ OcuScan AI - Retinal Disease Screening</h1>
-        <p style="color: #94a3b8; font-size: 14px; margin: 0 0 16px 0;">Multi-Label Residual Network with Grad-CAM Explainability Heatmaps</p>
-        <a href="/" target="_self" style="display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; text-decoration: none; font-weight: 600; border-radius: 8px; font-size: 14px; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">
-            Open Interactive Clinical Dashboard & Grad-CAM →
-        </a>
-    </div>
-    """)
-    with gr.Row():
-        with gr.Column():
-            gr_img = gr.Image(type="pil", label="Upload Retinal Fundus Photograph")
-            gr_btn = gr.Button("Analyze Fundus Image", variant="primary")
-        with gr.Column():
-            gr_out = gr.JSON(label="Multi-Label Diagnostic Findings")
-    
-    gr_btn.click(fn=_gradio_analyze, inputs=gr_img, outputs=gr_out)
+    with gr.Blocks(title="OcuScan AI - Retinal Diagnostics") as demo:
+        gr.HTML("""
+        <div style="text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: 12px; margin-bottom: 20px;">
+            <h1 style="color: #60a5fa; margin: 0 0 8px 0; font-size: 26px;">👁️ OcuScan AI - Retinal Disease Screening</h1>
+            <p style="color: #94a3b8; font-size: 14px; margin: 0 0 16px 0;">Multi-Label Residual Network with Grad-CAM Explainability Heatmaps</p>
+            <a href="/" target="_self" style="display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; text-decoration: none; font-weight: 600; border-radius: 8px; font-size: 14px; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">
+                Open Interactive Clinical Dashboard & Grad-CAM →
+            </a>
+        </div>
+        """)
+        with gr.Row():
+            with gr.Column():
+                gr_img = gr.Image(type="pil", label="Upload Retinal Fundus Photograph")
+                gr_btn = gr.Button("Analyze Fundus Image", variant="primary")
+            with gr.Column():
+                gr_out = gr.JSON(label="Multi-Label Diagnostic Findings")
+        
+        gr_btn.click(fn=_gradio_analyze, inputs=gr_img, outputs=gr_out)
 
-# Mount Gradio app onto FastAPI at /gradio
-app = gr.mount_gradio_app(app, demo, path="/gradio")
+    app = gr.mount_gradio_app(app, demo, path="/gradio")
 
 if __name__ == "__main__":
     import uvicorn
